@@ -32,7 +32,12 @@ async def get_current_weather(coords: Coords) -> CurrentWeather:
             r.raise_for_status()
             r_json = r.json()["current_weather"]
             return CurrentWeather(**r_json)
-    except (KeyError, json.JSONDecodeError, httpx.RequestError, httpx.HTTPStatusError) as exc:
+    except (
+        KeyError,
+        json.JSONDecodeError,
+        httpx.RequestError,
+        httpx.HTTPStatusError,
+    ) as exc:
         logger.error(f"Open-Meteo request failed: {exc}")
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY)
 
@@ -66,7 +71,12 @@ async def get_hourly_weather(coords: Coords) -> list[HourlyWeather]:
                 row_dict = dict(zip(r_json.keys(), row))
                 results.append(HourlyWeather(**row_dict))
             return results
-    except (KeyError, json.JSONDecodeError, httpx.RequestError, httpx.HTTPStatusError) as exc:
+    except (
+        KeyError,
+        json.JSONDecodeError,
+        httpx.RequestError,
+        httpx.HTTPStatusError,
+    ) as exc:
         logger.error(f"Open-Meteo request failed: {exc}")
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY)
 

@@ -1,0 +1,11 @@
+[project]
+name = "fastforecast"
+version = "0.1.0"
+description = "A weather API built with FastAPI and using data from the Open-Meteo API."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.141.1",
+    "httpx>=0.28.1",
+    "pydantic>=2.13.4",
+]

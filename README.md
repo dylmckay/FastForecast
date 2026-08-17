@@ -1,0 +1,1 @@
+A weather API built with FastAPI and using data from the Open-Meteo API.

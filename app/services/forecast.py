@@ -1,3 +1,4 @@
+import json
 import logging
 
 import httpx
@@ -31,7 +32,7 @@ async def get_current_weather(coords: Coords) -> CurrentWeather:
             r.raise_for_status()
             r_json = r.json()["current_weather"]
             return CurrentWeather(**r_json)
-    except (httpx.RequestError, httpx.HTTPStatusError) as exc:
+    except (KeyError, json.JSONDecodeError, httpx.RequestError, httpx.HTTPStatusError) as exc:
         logger.error(f"Open-Meteo request failed: {exc}")
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY)
 
@@ -65,7 +66,7 @@ async def get_hourly_weather(coords: Coords) -> list[HourlyWeather]:
                 row_dict = dict(zip(r_json.keys(), row))
                 results.append(HourlyWeather(**row_dict))
             return results
-    except (httpx.RequestError, httpx.HTTPStatusError) as exc:
+    except (KeyError, json.JSONDecodeError, httpx.RequestError, httpx.HTTPStatusError) as exc:
         logger.error(f"Open-Meteo request failed: {exc}")
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY)
 
@@ -82,7 +83,7 @@ async def get_location_info(location_name: str) -> list[LocationMatch]:
     except KeyError:
         logger.warning("No location matches found for that request.")
         results = []
-    except (httpx.RequestError, httpx.HTTPStatusError) as exc:
+    except (json.JSONDecodeError, httpx.RequestError, httpx.HTTPStatusError) as exc:
         logger.error(f"Open-Meteo request failed: {exc}")
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY)
     location_matches = [LocationMatch(**location) for location in results]

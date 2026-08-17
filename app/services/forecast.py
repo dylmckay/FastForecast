@@ -2,7 +2,8 @@ import logging
 
 import httpx
 from fastapi import HTTPException, status
-from schemas.forecast import Coords, CurrentWeather, HourlyWeather, LocationMatch
+
+from ..schemas.forecast import Coords, CurrentWeather, HourlyWeather, LocationMatch
 
 logger = logging.getLogger(__name__)
 

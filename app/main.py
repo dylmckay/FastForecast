@@ -3,6 +3,8 @@ import sys
 
 from fastapi import FastAPI
 
+from .routers.forecast import router
+
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 app = FastAPI(
@@ -10,3 +12,5 @@ app = FastAPI(
     description="A weather API built with FastAPI and using data from the Open-Meteo API.",
     version="0.0.1",
 )
+
+app.include_router(router)

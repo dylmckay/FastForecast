@@ -1,4 +1,9 @@
+import logging
+import sys
+
 from fastapi import FastAPI
+
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 app = FastAPI(
     title="FastForecast",

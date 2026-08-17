@@ -10,7 +10,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 app = FastAPI(
     title="FastForecast",
     description="A weather API built with FastAPI and using data from the Open-Meteo API.",
-    version="0.0.1",
+    version="0.1.0",
 )
 
 app.include_router(router)

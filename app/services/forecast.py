@@ -3,6 +3,7 @@ import logging
 
 import httpx
 from fastapi import HTTPException, status
+from pydantic import ValidationError
 
 from ..schemas.forecast import Coords, CurrentWeather, HourlyWeather, LocationMatch
 
@@ -90,11 +91,15 @@ async def get_location_info(location_name: str) -> list[LocationMatch]:
             )
             r.raise_for_status()
             results = r.json()["results"]
+        location_matches = [LocationMatch(**location) for location in results]
+        return location_matches
     except KeyError:
         logger.warning("No location matches found for that request.")
-        results = []
+        location_matches = []
+        return location_matches
+    except ValidationError:
+        logger.exception("Results malformed.")
+        raise
     except (json.JSONDecodeError, httpx.RequestError, httpx.HTTPStatusError) as exc:
         logger.error(f"Open-Meteo request failed: {exc}")
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY)
-    location_matches = [LocationMatch(**location) for location in results]
-    return location_matches

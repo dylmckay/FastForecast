@@ -97,9 +97,9 @@ async def get_location_info(location_name: str) -> list[LocationMatch]:
         logger.warning("No location matches found for that request.")
         location_matches = []
         return location_matches
-    except ValidationError:
-        logger.exception("Results malformed.")
-        raise
+    except ValidationError as exc:
+        logger.error(f"Results malformed: {exc}")
+        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY)
     except (json.JSONDecodeError, httpx.RequestError, httpx.HTTPStatusError) as exc:
         logger.error(f"Open-Meteo request failed: {exc}")
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY)
